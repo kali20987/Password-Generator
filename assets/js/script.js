@@ -11,26 +11,20 @@ function main() {
   var num = getNum();
   var spec = getSpec();
   if (lcase || ucase || num || spec) {
-    password = generatePassword();
+    password = generatePassword(len, lcase, ucase, num, spec);
   } else {
     showCharacterError();
   }
-  writePassword();
+  writePassword(password);
 }
 
 // Get references to the #generate element
 var generateBtn = document.querySelector("#generate");
 
 // Write password to the #password input
-function writePassword() {
-
-  var password = generatePassword();
+function writePassword(password) {
   var passwordText = document.querySelector("#password");
-
-
-
   passwordText.value = password;
-
 }
 
 function getLength() {
@@ -61,11 +55,35 @@ function showCharacterError() {
   alert("At least one character type must be selected");
 }
 
-function generatePassword() {
-  
-  if (lcase) {
+function generatePassword(len, lcase, ucase, num, spec) {
+  var lower = 'abcdefghijklmnopqrstuvwxyz';
+  var upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  var numbers = '0123456789';
+  var specials = '!@#$%^&*()';
+  var selected = '';
+  var result = '';
 
+  if (lcase) {
+    selected = selected + lower;
   }
+
+  if (ucase) {
+    selected = selected + upper;
+  }
+
+  if (num) {
+    selected = selected + numbers;
+  }
+
+  if (spec) {
+    selected = selected + specials;
+  }
+
+  for ( var i = 0; i < len; i++ ) {
+    result += selected.charAt(Math.floor(Math.random() * selected.length))
+  }
+
+  return result;
 }
 // Add event listener to generate button
 generateBtn.addEventListener("click", main);
